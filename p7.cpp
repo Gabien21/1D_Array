@@ -1,3 +1,5 @@
+//VCT nhập vào 1 dãy 16  bit nhị  phân (có dấu), chuyển đổi dãy bit nhị phân sang số thập phân tương ứng. 
+
 #include <iostream>
 #include <cmath>
 using namespace std;

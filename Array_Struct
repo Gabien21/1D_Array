@@ -1,0 +1,145 @@
+//VCT tính tổng 1 dãy phân số, sắp xếp lại dãy theo thứ tự tăng & xuất kết quả.
+
+#include <iostream>
+#include <cmath>
+using namespace std;
+#define MAX 100
+
+//VCT tính tổng 1 dãy phân số, sắp xếp lại dãy theo thứ tự tăng & xuất kết quả.
+
+//Khai bao kieu Phan so
+struct PhanSo
+{
+    int TS; //Tu so
+    int MS; //Mau so
+};
+
+//Ham hoan doi vi tri cua hai so
+void HoanDoi(int& a, int& b)
+{
+    int temp = a;   // Gan gia tri cua a cho bien phu
+    a = b;          //Gan gia tri cua bien b cho a
+    b = temp;       //Gan gia tri cua bien phu cho b
+}
+
+//Ham sap xep phan so tang dan theo thu tu
+void SapXepTangDan(PhanSo ps[], int n)
+{
+    //Dung vong lap de so sanh tung so voi nhau trong mang
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = i + 1; j < n; j++)
+        {
+            //Neu gia tri cua ps[i] > gia tri cua ps[j] 
+            //thi hoan doi gia tri cua tu so va mau so cua hai phan so cho nhau
+            if((double)ps[i].TS/ps[i].MS > (double)ps[j].TS/ps[j].MS)
+            {
+                HoanDoi(ps[i].TS,ps[j].TS);
+                HoanDoi(ps[i].MS,ps[j].MS);
+            }
+        }
+    }
+}
+
+//Ham nhap mot phan so
+void NhapPhanSo(PhanSo& x)
+{
+    cout << "Nhap tu so: "; cin >> x.TS;
+    do
+    {   
+        cout << "Nhap mau so (khac 0): "; cin >> x.MS;
+        if(x.MS == 0)   //Neu mau so bang 0 thi khong hop le
+            cout << "Mau so khong hop le, moi nhap lai!" << endl;
+    } while (x.MS == 0);   //Nhap den khi mau so hop le
+}
+
+//Ham nhap mang phan so
+void NhapMangPhanSo(PhanSo ps[], int& n)
+{
+    do
+    {
+        cout << "Nhap so phan tu ma ban muon: ";
+        cin >> n;
+        if(n > MAX || n < 0)   //Neu so phan tu > MAX hoac < 0 thi khong hop le
+            cout << "So phan tu khong hop le, moi nhap lai!" << endl;
+    } while (n > MAX || n < 0); //Nhap lai den khi so phan tu hop le
+
+    //Nhap tu phan so vao mang
+    for(int i = 0; i < n; i++)
+    {
+        cout << "Phan so thu " << i + 1 << ": " << endl;
+        NhapPhanSo(ps[i]);
+    }    
+}
+
+//Ham tim UCLN cua hai so
+int UCLN(int a, int b)
+{
+    if(a%b==0) return b;
+    return UCLN(b,a%b);
+}
+
+//Ham rut gon phan so
+void RutGon(PhanSo& x)
+{
+    int uocChung = UCLN(abs(x.TS),abs(x.MS));   //Tim uoc chung lon nhat cua tu so va mau so
+    //Chia ca tu va mau cho uoc chung lon nhat 
+    x.TS /= uocChung;   
+    x.MS /= uocChung;
+    //Gan dau '-' sao cho hop li
+    if((x.TS < 0 && x.MS < 0) || (x.TS > 0 && x.MS < 0))
+    {
+        x.TS = -x.TS;
+        x.MS = -x.MS;
+    }
+}
+
+//Hma tinh tong hai phan so
+PhanSo Tong(PhanSo x, PhanSo y)
+{
+    PhanSo tong;
+    tong.TS = x.TS * y.MS + x.MS * y.TS;
+    tong.MS = x.MS * y.MS;
+    RutGon(tong);
+    return tong;
+}
+
+//Ham tinh tong cac phan tu trong mang
+PhanSo TongCacPhanTu(PhanSo ps[], int n)
+{
+    PhanSo tong;
+    tong.TS = 0;
+    tong.MS = 1;
+    for(int i = 0; i < n; i++)
+    {
+        tong = Tong(tong,ps[i]);
+    }
+    return tong;
+}
+
+//Ham xuat mang phan so sau khi sap xep
+void XuatMangPhanSo(PhanSo ps[], int n)
+{
+    cout << "Cac phan so duoc sap xep tang dan: ";
+    //Xuat ra tung phan so trong mang
+    for(int i = 0; i < n; i++)
+    {
+        RutGon(ps[i]);  //Rut gon phan so
+        if(ps[i].MS == 1) cout << ps[i].TS << " ";  //Neu mau so bang 1 thi chi can xuat ra tu so
+        else
+            cout << ps[i].TS << "/" << ps[i].MS << " ";
+    }
+}
+
+int main()
+{
+    PhanSo ps[MAX];
+    int n;
+    NhapMangPhanSo(ps,n);   //Nhap vao mang phan so
+    PhanSo a;
+    a = TongCacPhanTu(ps,n);
+    cout << "Tong cac phan tu la: " << a.TS << "/" << a.MS << endl;
+    SapXepTangDan(ps,n);    //Sap xep mang phan so theo thu tu tang dan
+    XuatMangPhanSo(ps,n);   //Xuat ra mang phan so sau khi sap xep
+    return 0;
+}

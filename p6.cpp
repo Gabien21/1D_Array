@@ -1,3 +1,5 @@
+//VCT nhập vào 1 số nguyên dương n. Chuyển đổi n sang hệ nhị phân và xuất  ra màn hình, sử dụng mảng một chiều. (Nâng cao: với -255 <= n <= 255)
+
 #include <iostream>
 #include <cmath>
 using namespace std;

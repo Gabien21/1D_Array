@@ -1,3 +1,7 @@
+//VCT nhập một mảng số có n phần tử và một giá trị X, xây dựng các hàm thực hiện:
+//a) Kiểm tra X có trong mảng không. 
+//b) Nếu X không có trong mảng thì chèn X vào mảng tại vị trí sau phần tử đầu tiên. 
+
 #include <iostream>
 using namespace std;
 #define MAX 1000

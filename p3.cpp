@@ -1,3 +1,9 @@
+//VCT nhập một mảng số nguyên có n phần tử, xây dựng các hàm thực hiện: 
+//a)  Kiểm tra mảng có đối xứng không. 
+//b)  Kiểm tra mảng có đan xen âm dương không. 
+//c)  Kiểm tra mảng có tất cả các cặp phần tử đứng cạnh nhau đều có giá trị khác nhau.
+//d) Kiểm tra mảng có tất cả bộ 3 phần tử đứng cạnh nhau lập thành cấp số cộng. 
+
 #include <iostream>
 using namespace std;
 #define MAX 1000

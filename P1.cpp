@@ -1,3 +1,5 @@
+//VCT nhập vào  N số  thực từ  bàn phím và lưu vào mảng các số  thực, cho biết trong  mảng có bao nhiêu số âm.
+
 #include <iostream>
 using namespace std;
 #define MAX 1000

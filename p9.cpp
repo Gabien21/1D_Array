@@ -1,3 +1,7 @@
+//VCT nhập 2 dãy số nguyên A, B gồm m, n phần tử (1 ≤ n, m ≤ 25):
+//a) Xuất ra những phần tử có trong A mà không có trong B.
+//b) Ghép A, B thành C sao cho C không có phần tử trùng nhau.
+
 #include <iostream>
 using namespace std;
 #define MAX 1000

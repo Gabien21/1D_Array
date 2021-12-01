@@ -1,3 +1,9 @@
+//VCT nhập một mảng số nguyên có n phần tử, xây dựng các hàm tính tổng các phần tử là: 
+//a)  số chính phương 
+//b)  số hoàn chỉnh 
+//c)  số nguyên tố 
+//d)  số dương đối xứng 
+
 #include <iostream>
 #include <cmath>
 using namespace std;

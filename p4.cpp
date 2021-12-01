@@ -1,3 +1,7 @@
+//VCT nhập một mảng có n phần tử là các số, xây dựng các hàm thực hiện: 
+//a) Kiểm tra mảng có thứ tự tăng/giảm không. 
+//b) Nếu mảng không có thứ tự thì sắp xếp các phần tử theo thứ tự tăng dần. 
+
 #include <iostream>
 using namespace std;
 #define MAX 1000

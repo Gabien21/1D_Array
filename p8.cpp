@@ -1,3 +1,8 @@
+//VCT nhập vào một mảng các số nguyên dương gồm n phần tử (1 ≤ n ≤ 15):
+//a) Đếm số phần tử tận cùng là 6 và chia hết cho 6 trong mảng.
+//b) Tính trung bình cộng các số nguyên tố hiện có trong mảng.
+//c) Cho biết trong mảng có bao nhiêu số nguyên tố phân biệt.
+
 #include <iostream>
 using namespace std;
 #define MAX 1000

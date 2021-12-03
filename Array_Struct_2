@@ -1,0 +1,352 @@
+//Gọi thời_điểm là một mốc ngày-tháng-năm-giờ-phút trong năm 2021 và 2022. 
+//Xây dựng kiểu dữ liệu biểu diễn các mốc sự kiện với mỗi mốc sự kiện cần biểu diễn 3 thông tin :hời_điểm , tên sự kiện, độ quan trọng 
+//(bao gồm 4 mức : không quan trọng, có chút quan trọng, khá quan trọng, rất quan trọng).  
+//Hãy viết các hàm thực hiện các việc sau :
+//a/ Liệt kê các sự kiện khá hoặc rất quan trọng.
+//b/ Liệt kê các sự kiện diễn ra vào buổi sáng.
+//c/ Sửa độ quan trọng của 1 sự kiện (khi biết thời điểm diễn ra sự kiện đó).
+//d/ Xác định sự kiện rất quan trọng sau 1 thời điểm được chỉ ra.
+//e/ Sắp xếp danh sách theo thứ tự thời gian.
+//f/ Xóa các sự kiện không quan trọng ra khỏi danh sách.
+
+#include <iostream>
+#include <string>
+using namespace std;
+const int MAX = 1000;
+
+struct moment
+{
+    int ngay;
+    int thang;
+    int nam;
+    int gio;
+    int phut;
+};
+
+// Cấu trúc chứa thông tín sự kiện
+struct event {
+	moment ThoiGian; // Thời điểm của sự kiện (ngày-tháng-năm-giờ-phút)
+	string Ten;		//	Tên sự kiện
+	int QuanTrong;  // Độ quan trọng từ 0->3 tăng dần theo mức độ quan trọng
+};
+
+// Cấu trúc quản lí nhiều sự kiện
+struct events {
+	event a[MAX]; // Mảng chứa các sự kiện
+	int n;		  // số các sự kiện	
+};
+
+//Hàm kiểm tra xem thời điểm nhập vào có đúng không
+bool KiemTraThoiDiem(int gio, int phut, int ngay, int thang, int nam)
+{
+    bool KT = true;
+    //Kiểm tra giờ nhập vào có đùng không
+    if (gio < 0 || gio >= 24)
+    {
+        cout << "Gio khong hop le!" << endl;
+        KT = false;
+    }
+
+    //Kiêm tra phút nhập vào có đúng không
+    if (phut < 0 || phut >= 60)
+    {
+        cout << "Phut khong hop le!" << endl;
+        KT = false;
+    }
+
+    //Kiểm tra tháng nhập vào có đúng không
+    switch (thang)
+    {
+    case 2:
+        if (ngay < 1 && ngay > 28)
+        {
+            cout << "Ngay va thang da nhap khong hop le!" << endl;
+            KT = false;
+        }
+        break;
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+    case 8:
+    case 10:
+    case 12:
+        if (ngay < 1 && ngay > 31)
+        {
+            cout << "Ngay va thang da nhap khong hop le!" << endl;
+            KT = false;
+        }
+        break;
+    case 4:
+    case 6:
+    case 9:
+    case 11:
+        if (ngay < 1 && ngay > 30)
+        {
+            cout << "Ngay va thang da nhap khong hop le!" << endl;
+            KT = false;
+        }
+        break;
+    default:
+    {
+        cout << "Thang khong hop le!" << endl;
+        KT = false;
+        break;
+    }
+    }
+
+    //kiểm tra năm nhập vào có đúng không
+    if (nam != 2021 && nam != 2022)
+    {
+        cout << "Nam khong hop le!" << endl;
+        KT = false;
+    }
+    if (!KT) cout << "Moi nhap lai!" << endl;
+    return KT;
+}
+
+//hàm nhập thời điểm
+void NhapThoiDiem(moment& m)
+{
+    do
+    {
+        cout << "Nhap gio, phut, ngay, thang, nam: ";
+        cin >> m.gio >> m.phut >> m.ngay >> m.thang >> m.nam;
+        //Nhập đến khi nào thời điểm hợp lệ thì dùng vòng lặp
+    } while (!KiemTraThoiDiem(m.gio, m.phut, m.ngay, m.thang, m.nam));  
+}
+
+//Hàm xuất thời điểm
+void XuatThoiDiem(moment m)
+{
+    if (m.gio < 10)
+        cout << "0" << m.gio << " gio ";
+    else
+        cout << m.gio << " gio ";
+    if (m.phut < 10)
+        cout << "0" << m.phut << " phut ";
+    else
+        cout << m.phut << " phut ";
+    if (m.ngay < 10)
+        cout << "0" << m.ngay << "/";
+    else
+        cout << m.ngay << "/";
+    if (m.thang < 10)
+        cout << "0" << m.thang << "/" << m.nam << endl;
+    else
+        cout << m.thang << "/" << m.nam << endl;
+}
+
+// Hàm nhập các thông tin của một sự kiện
+void NhapSuKien(event& E)
+{
+	cout << "Hay nhap ten su kien:";
+	cin.ignore();
+	getline(cin, E.Ten);
+	NhapThoiDiem(E.ThoiGian);
+	cout << "Hay nhap do quan trong cua su kien (0->3):";
+	cin >> E.QuanTrong;
+}
+
+// Hàm xuất thông tin của một sự kiện
+void XuatSuKien(event E)
+{
+	cout << "Ten cua su kien la: " << E.Ten << endl;
+	XuatThoiDiem(E.ThoiGian);
+	cout << "Do quan trong cua su kien la: ";
+	if (E.QuanTrong == 0)
+		cout << "Khong Quan Trong" << endl;
+	if (E.QuanTrong == 1)
+		cout << "Co chut quan trong" << endl;
+	if (E.QuanTrong == 2)
+		cout << "Kha la quan trong" << endl;
+	if (E.QuanTrong == 3)
+		cout << "Rat quan trong" << endl;
+	cout << endl;
+}
+
+//Hàm nhập mảng các sự kiện
+void NhapCacSuKien(events& Es)
+{
+	cout << "Nhap so su kien: "; cin >> Es.n;    //Nhạp vào số sự kiện
+    //Dùng vòng lặp for để nhập vào từng sự kiện
+	for (int i = 0; i < Es.n; i++)
+	{
+		cout << "Nhap su kien " << i + 1 << ": " << endl;
+		NhapSuKien(Es.a[i]);
+	}
+}
+
+//Hàm xuất mảng các sự kiện
+void XuatCacSuKien(events Es)
+{
+    //Dùng vòng lặp for để xuất từng sự kiện
+	for (int i = 0; i < Es.n; i++)
+	{
+		XuatSuKien(Es.a[i]);
+	}
+}
+
+int SoSanh2ThoiDiem(moment m1, moment m2)
+{
+    if(m1.nam != m2.nam)
+    {
+        if(m1.nam < m2.nam) return 0;
+    }
+    else if(m1.thang != m2.thang) 
+    {
+        if(m1.thang < m2.thang) return 0;
+    }
+    else if(m1.ngay != m2.ngay)
+    {
+        if(m1.ngay < m2.ngay) return 0;
+    }
+    else if(m1.gio != m2.gio) 
+    {
+        if(m1.gio < m2.gio) return 0;
+    }
+    else if(m1.phut != m2.phut)
+    {
+        if(m1.phut < m2.phut) return 0;
+    }
+    else return 2;
+    return 1;
+}
+
+// Hàm xuất các sự kiện quan trọng và khá quan trọng
+void XuatSuKienQuanTrong(events Es)
+{
+    cout << "\tCac su kien quan trong va kha quan trong la: " << endl;
+    //Dùng vòng lặp for để xét từng sự kiện
+	for (int i = 0; i < Es.n; i++)
+        //Nếu sự kiện quan trọng hoặc khá quan trọng (>=2) thì xuất ra
+		if (Es.a[i].QuanTrong >= 2)   
+		{
+			XuatSuKien(Es.a[i]);
+		}
+    cout << endl;
+}
+
+//Hàm xuất các sự kiện diễn ra vào buổi sáng
+void DienRaBuoiSang(events Es)
+{
+	cout << "\tCac su kien dien ra vao buoi sang la: " << endl;
+	//Dùng vòng lặp for để xét từng trường hợp
+	for (int i = 0; i < Es.n; i++)
+		//Nếu sự kiện diễn ra sau 6 giờ và tước 12 giờ thì xuất ra sự kiện đó
+		if (Es.a[i].ThoiGian.gio >= 6 && Es.a[i].ThoiGian.gio < 12)
+			XuatSuKien(Es.a[i]);
+}
+
+// Trả về vị trí diễn ra của một sự kiện tại 1 thời điểm trong danh sách các sự kiện
+int TimSuKien(events Es, moment m)
+{
+	int i;
+	for (i = 0; i < Es.n; i++)
+		if (SoSanh2ThoiDiem(Es.a[i].ThoiGian, m) == 2)
+			return i;
+  return -1;
+}
+
+//Hàm sửa độ quan trọng khi biết thời điểm
+void SuaDoQuanTrong(events& Es)
+{
+	moment m;
+	cout << "hay nhap vao thoi gian dien ra cho su kien muon sua do quan trong!\n";
+	NhapThoiDiem(m);
+	int vt = TimSuKien(Es, m);
+	int x;
+	cout << "Nhap vao do quan trong moi cho su kien:";
+	cin >> x;
+	Es.a[vt].QuanTrong = x;
+	cout << "Su kien sau ki sua do quan trong la: " << endl;
+	XuatSuKien(Es.a[vt]);
+}
+
+//Hàm xuất ra sự kiện rất quan trọng sau một thời điểm cho trước
+void SKQuanTrongSauThoiDiem(events Es)
+{
+	cout << "\tXac dinh su kien rat quan trong sau 1 thoi diem duoc chi ra:" << endl;
+	moment m;
+	NhapThoiDiem(m);
+	//Dùng vòng lặp để xét từng sự kiện
+	for (int i = 0; i < Es.n; i++)
+		//Nếu sự kiện tìm được diễn ra sau thời điểm nhập vào 
+		//và sự kiện đó rất quan trọng (=3) thì xuất ra sự kiện
+		if (SoSanh2ThoiDiem(Es.a[i].ThoiGian, m) == 1 && Es.a[i].QuanTrong == 3)
+		{
+			cout << endl;
+			XuatSuKien(Es.a[i]);
+			return; //Thoát khỏi hàm
+		}
+	cout << "Khong co su kien nao quan trong sau thoi diem ban vua nhap!" << endl;
+}
+
+//Hàm tìm vị trí thời điểm trễ nhất trong mảng
+int ThoiDiemMax(events E, int n)
+{
+	int max = 0;
+	for (int i = 1; i < n; i++)
+		//Nếu thời điểm của sự kiện a[i] diễn ra sau sự kiện a[max] thì max = i
+		if (SoSanh2ThoiDiem(E.a[i].ThoiGian,E.a[max].ThoiGian))
+			max = i;
+	return max; //Trả về vị trí của thời điểm trễ nhất trong mảng
+}
+
+//Hàm hoán đổi vị trí của 2 sự kiện
+void HoanDoi(event& a, event& b)
+{
+	event temp = a;
+	a = b;
+	b = temp;
+}
+
+//Hàm sắp xếp các sự kiện theo thứ tự thời gian
+void SapXep(events& Es)
+{
+	int k = Es.n;
+	while (k--) //Sau mỗi lần lặp thì vị trí của phần tử cuối cùng trong mảng giảm đi 1 đơn vị
+	{
+		//Lần lượt chuyển vị trí của phần tử xảy ra sau ra sau mảng
+		int j = ThoiDiemMax(Es, k + 1);
+		HoanDoi(Es.a[k], Es.a[j]);
+	}
+	cout << "\tCac su kien sau khi sap xep theo thu tu thoi gian: " << endl;
+	XuatCacSuKien(Es);
+}
+
+// Xóa sự kiện tại vị trí vt trong danh sách sự kiện
+void XoaSK(events& Es, int vt)
+{
+	int i;
+	// Xóa như một mảng có n phần tử thông thường
+	for (i = vt; i < Es.n - 1; i++)
+		Es.a[i] = Es.a[i + 1];
+	Es.n--;
+}
+
+void XoaSKKhongQuanTrong(events& Es)
+{
+	int i;
+	for (i = 0; i < Es.n; i++)	// Tìm các sự kiện không quan trong QuanTrong=0
+		if (Es.a[i].QuanTrong == 0)
+		{
+			XoaSK(Es, i);
+			i--;	// Vì khi xóa 1 phần tử thì mảng sẽ giảm 1 nên ta giảm i đi 1
+					// để lần lặp sau khi i tăng lên 1 ta không bị sót 1 phần tử
+		}
+}
+
+int main()
+{
+	  events Es;
+    NhapCacSuKien(Es);
+    XuatSuKienQuanTrong(Es);
+    DienRaBuoiSang(Es);
+    SuaDoQuanTrong(Es);
+    SKQuanTrongSauThoiDiem(Es);
+    SapXep(Es);
+    XoaSKKhongQuanTrong(Es);
+    XuatCacSuKien(Es);
+	  return 0;
+}
